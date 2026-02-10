@@ -37,7 +37,7 @@ team_aces |> mutate(percentile = ntile(total_aces, 100))
 
 Write a couple of sentences that puts Maryland into context with the other teams in the dataset. You can do some Internet research to help with this.
 
-
+Maryland's womens volleyball team has scored more aces during their matches than 95% of other NCAA teams thanks in part to pin hitter Samantha Schnitta, who once served five aces in one game against American University.
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
 
