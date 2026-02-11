@@ -9,6 +9,7 @@ In this assignment, we will be working with a dataset of total crimes reported b
 You will need to load the tidyverse library and the janitor library
 
 ```{r}
+library('tidyverse')
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv. You will create a dataframe called `md_cities` that contains the data from this URL.
@@ -16,19 +17,25 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data
 
 ```{r}
+md_cities <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv")
 ```
 ### Task 3: Calculating Rates
 
 Calculate violent and property crime rates for each city for both years using `mutate()`. You'll create four new columns: `violent_rate_2019`, `property_rate_2019`, `violent_rate_2020`, and `property_rate_2020`. You'll need to figure out the proper unit rate, given that there are varying populations. There's no perfect choice; choose the one that works best for you. Save the results to a new dataframe called `md_cities_rates`.
 
 ```{r}
+md_cities_rates <- md_cities |> mutate(
+  violent_rate_2019 = (violent2019 / pop2019)*100,
+violent_rate_2020 = (violent2020 / pop2020)*100,
+property_rate_2019 = (property2019 / pop2020)*100,
+property_rate_2020 = (property2020 / pop2020)*100)
 ```
 
 ### Task 4: Describe the Rates
 
 Examine the new dataframe, `md_cities_rates`, by clicking on it in the Environment tab in RStudio and sorting by the rate columns. Write a couple of sentences about the results, comparing and contrasting the cities with the highest rates (both violent and property) in 2019 and 2020. Do you see any patterns? What does this tell you about crime in Maryland cities? What's the story here?
 
-ANSWER HERE
+Ocean City led with highest rate of property crime in 2019 and 2020, with 10.4 property crimes for every 100 people in 2019 and 12.13 for every 100 people in 2020. They also had the highest rate of violent crime in 2020, with a rate of 2.40 violent crimes per 100 people. Baltimore had the highest violent crime rate in 2019 of 1.83 violent crimes for every 100 people. Ocean City was second behind Baltimore in 2019 for violent crime with a rate of 1.31 violent crimes for every 100 people. Baltimore was second behind Ocean City for violent crime in 2020 at 1.60 for every 100 people. Those two cities are definitely noteworthy, and looking at the crime there is important. It surprised me that the rate of property crime in Ocean City rose in 2020, due to COVID I would have expected it to decrease. 
 
 
 ### Task 5: Calculate Percentage Change
@@ -36,19 +43,22 @@ ANSWER HERE
 Let's add two percentage change columns to your dataframe: one for violent crime rates and one for property crime rates. You'll calculate the percentage change between 2019 and 2020 for each city. Save the results to a new dataframe called `md_cities_change`.
 
 ```{r}
+md_cities_change <- md_cities_rates |> mutate(violent_change = ((violent_rate_2020 - violent_rate_2019)/(violent_rate_2019))*100, property_change = ((property_rate_2020 - property_rate_2019)/(property_rate_2019))*100)
 ```
 
 ### Task 7: Describe Percentage Changes
 
 Look at the `md_cities_change` dataframe by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the percentage change results. What's more interesting here, the patterns or the outliers? What's the story in the data?
 
-ANSWER HERE
+The most interesting news stories are usually the ones based on things that are unusual. With very low numbers, like violent crime going from 1 to 0, it will look like a huge 100% change, so just because the percent change looks big may not mean the change is that significant. There are some things that stand out as unusual to me, like violent crime in Edmonson rising almost 900%, however if you look at the true numbers it had gone from 3 violent crimes in 2019 to 12 in 2020, and the rate for violent crime was still under 1 per every 100 people in both instances. I think the most interestiing increase shown in this data is the 318.18% increase in property crime seen in Crisfield, rising from 0.43 property crimes for every 100 people to 1.81 for every 100 people. The raw numbers show there were 11 property crimes in 2019 and 46 property crimes in 2020. 
 
 ### Task 8: Tell the Best Story
 
 Write up a lede and nutgraf of a story with the _best_ story idea you've found in this assignment. The lede should be a single sentence that summarizes the most important information in the data. The nutgraf should be a paragraph that provides more context and explains why the data is important.
 
-ANSWER HERE
+Despite lockdown from the COVID-19 pandemic, property crime rates have jumped more than 300% this past year in Edmonson, MD. 
+
+Rates rose from 0.43 property crimes for every 100 people to 1.81 property crimes for every 100 people in the city
 
 ### Task 9: Save Your Work and Put it on GitHub
 
