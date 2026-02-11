@@ -58,7 +58,7 @@ Write up a lede and nutgraf of a story with the _best_ story idea you've found i
 
 Despite lockdown from the COVID-19 pandemic, property crime rates have jumped more than 300% this past year in Edmonson, MD. 
 
-Rates rose from 0.43 property crimes for every 100 people to 1.81 property crimes for every 100 people in the city
+Rates rose from 0.43 property crimes for every 100 people to 1.81 property crimes for every 100 people in the city.
 
 ### Task 9: Save Your Work and Put it on GitHub
 
