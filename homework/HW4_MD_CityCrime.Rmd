@@ -63,3 +63,20 @@ Rates rose from 0.43 property crimes for every 100 people to 1.81 property crime
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: Percentiles
+Using the 2020 violent crime rate, calculate the percentiles using `ntile()`. Save the results to a new dataframe called `md_cities_percentiles`. How many cities are above the 90th percentile?
+Calculate the Interquartile Range of the 2020 violent crime rate using `summarize()` and R's `IQR()` function. The syntax is similar to how `mean()` works.
+Do the results change your best story idea from the previous assignment? Why or why not?
+
+```{r}
+md_cities_percentiles <- md_cities_rates |> mutate(percentiles = ntile(violent_rate_2020, 100))
+md_cities_percentiles |> summarize(
+  iqr = IQR(violent_rate_2020)
+  
+)
+### iqr = 0.4198895
+```
+
+10 cities are above the 90th percentile, meaning 10 cities had a higher violent crime rate than 90% of other Maryland cities.
+The interquartile range is 0.4198895, meaning the middle 50% of violent crime rates are spread over a range of about 0.42. Seeing as our highest value is only about 1.31, this spread means there is a moderate amount of variation in the data. I still think I would keep my story about the property crime rate rising. 
