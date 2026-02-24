@@ -298,5 +298,5 @@ top_outliers |> kable(digits = 2)
 
 Based on our z-score analysis, what are some potential angles for reporting? What would your next steps be and what would you tell an editor about your findings?
 
-ANSWER HERE
+Based on the finding that there was at least 1 call every day about overdoses and that there were more unusually high days than unusually low, I would look into highlighting local community programs that help with drug prevention and harm reduction, as this seems to be a needed resource in the area. Leading the story with the fact that calls come in daily about drug overdoses would be important to show the necessity of the story, and then I could delve into programs, where to find them, what they do, and how to support them.
 
