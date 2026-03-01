@@ -27,19 +27,13 @@ library(knitr)      # For nice tables
 library(lubridate)  # For working with dates
 ```
 
-## Loading the Data
+### Task 1: Loading the Data (1 point)
 
-We'll load the accident data from our CSV file:
+Load the accident data from our CSV file at https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/daily_accidents.csv into a dataframe called `accidents`:
 
 ```{r load-data}
-# Load accident data
 accidents <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/daily_accidents.csv")
 
-# Display the first few rows
-head(accidents)
-
-# Check basic info about the dataset
-glimpse(accidents)
 ```
 
 ## Data Exploration
@@ -72,10 +66,10 @@ ggplot(accidents, aes(x = date, y = total)) +
        caption = "Source: Prince George's County Accident Data")
 ```
 
-### Task 1 (3 points)
+### Task 2 (3 points)
 Looking at the time series visualization above, identify at least two noticeable patterns or anomalies. What questions would you want to investigate further based on this initial view of the data? How might these visual patterns translate into potential story angles?
 
-ANSWER HERE
+The two biggest anomalies in this chart are the peak at 58 car accidents in a day, as well as points where car accidents drastically dropped. Looking into the weather conditions of the day that peaked with accidents would be my first guess, it was October so I don't think it would have been raining. It could have been raining, but it also could have been the day a new traffic light went into effect or construction was being done on a main road. For the dip in 2020, it is kind of unsurprising and can sort of be chalked up to quarantining for COVID. However, there is also a point in 2018 where accidents seemed to have been a little less frequent compared to more recent years, so looking at what conditions were at play there would be good. If there were something done like speed checks at the time discouraging reckless driving, you could further investigate that and see how effective something like that is. 
 
 The daily data is quite noisy, so let's also look at weekly patterns:
 
@@ -111,14 +105,16 @@ ggplot(accidents, aes(x = day_of_week, y = total)) +
        caption = "Source: Prince George's County Accident Data")
 ```
 
-### Task 2 (2 points)
+### Task 3 (2 points)
 Based on the day-of-week analysis, which day(s) have the highest and lowest average accidents? Why might these patterns exist?
 
-ANSWER HERE
+Friday has the peak of accidents and the highest median, with Saturday coming second. This is probably because these are weekend nights, people are more likely to be out, potentially drinking, and so accidents are more likely to happen. Monday, Tuesday, and Wednesday all seem to have the same and lowest median amount. It's the start of the week and people are probably just trying to get to work and come home, not really going out as much and sticking to themselves. 
 
 ## Calculating Z-Scores
 
-Now, let's calculate z-scores for our accident totals:
+### Task 4 (2 points)
+
+Now, using the accidents dataframe, add three columns using `mutate()`: mean_accidents, sd_accidents and z_score, based on the example from class.
 
 ```{r calculate-z-scores}
 # Calculate z-scores for total accidents
@@ -158,10 +154,10 @@ unusual_days |>
   kable(digits = 2)
 ```
 
-### Task 3 (3 points)
+### Task 5 (3 points)
 Choose one of the top 10 unusual days and research what might have happened on that date. Look for weather events, holidays, major incidents, or other factors that could explain the unusual number of accidents. Briefly describe your findings and how you would incorporate this context into a story.
 
-ANSWER HERE
+I looked online at the May 29 date with 50 accidents and saw this (https://www.nbcwashington.com/video/weather/evening-weather-may-29-2021/2687095/) article saying there was a severe storm during this date, so it makes sense that there were lots of accidents. I would definitely point this out when pitching the story and probably look into advice on handling hydroplaning and advise against driving when delivering the story.
 
 Let's visualize these unusual days:
 
@@ -169,7 +165,7 @@ Let's visualize these unusual days:
 # Highlight unusual days in the time series
 ggplot(accidents, aes(x = date, y = total, color = abs(z_score) > 2)) +
   geom_point(alpha = 0.5) +
-  scale_color_manual(values = c("gray", "red"), 
+  scale_color_manual(values = c("gray", "red"),
                      name = "Unusual Value",
                      labels = c("Normal", "Unusual")) +
   theme_minimal() +
@@ -182,7 +178,9 @@ ggplot(accidents, aes(x = date, y = total, color = abs(z_score) > 2)) +
 
 ## Day of Week Patterns
 
-Let's calculate z-scores that account for day of week patterns:
+### Task 6 (3 points)
+
+Let's calculate z-scores that account for day of week patterns based on the same pattern as above:
 
 ```{r day-of-week-z-scores}
 # Calculate day-of-week adjusted z-scores
@@ -207,10 +205,10 @@ unusual_dow |>
   kable(digits = 2)
 ```
 
-### Task 4 (3 points)
+### Task 7 (3 points)
 Compare the days that have extreme z-scores overall versus those with extreme day-of-week z-scores. How do these lists differ? What journalistic insights can you draw from comparing these two different approaches to measuring "unusual" days?
 
-ANSWER HERE
+This chart now shows us if any data is even more unusual, because a high amount of accidents on a Monday is much more unusual than a high amount of accidents on a Friday. This helps us look for the even more extreme cases, and also shows us how something like a slightly higher number of accidents on a Monday is still unusual, while comparing it to the mean for all days may suggest otherwise. The z-score for the Friday with 58 accidents when compared to other Fridays is lower than the z-score for that date compared to all accidents. We also see a lot of accidents with a little "lower" than the other high amounts crop up here, one that stands out to me being a Tuesday date with 45 accidents and a z-score of 3.42. This would help us look for unusual days that don't come up during a traditional z-score check and look for the conditions that may have been at play during the time of those high accident days.
 
 Let's see how many unusual days we have for each day of the week:
 
@@ -286,10 +284,10 @@ unusual_monthly |>
   kable(digits = 2)
 ```
 
-### Task 5 (2 points)
+### Task 8 (2 points)
 Based on the monthly pattern analysis, which months have the highest and lowest average accidents? Develop a hypothesis about why these seasonal patterns exist.
 
-ANSWER HERE
+October peaks for accidents, while January has the lowest average. The way this chart trends, it looks like reckless drivers seem to ramp up their reckless driving throughout the year, and then on New Years they make their resolution to drive safer, and then slowly wean off that resolution. Another possibility is that stress from around the holidays is distracting drivers, causing them to get into more accidents.  
 
 ## Identifying Extreme Outliers
 
@@ -311,12 +309,17 @@ if(nrow(extreme_outliers) > 0) {
 }
 ```
 
-### Task 6 (2 points)
+### Task 9 (2 points)
 For the extreme outliers identified (z-scores beyond ±3), what do they have in common?
 
-ANSWER HERE
+Almost all of the extreme outliers are on Friday and Saturday, except or the two extremely low outliers on Sunday (-3.13 z-score) and Monday (-3.42 z-score). 
 
 ## Your Best Story Pitch
 
-### Task 7 (5 points)
+### Task 10 (5 points)
 Based on all the analyses performed, craft your best story pitch, including a headline and lede. Be sure to include what kinds of sources/people you'd talk to for the story.
+
+Headline: Severe thunderstorm shakes Prince George's County, over 50 accidents
+Lede: As heavy rain pummeled Prince George's County on Oct. 29, accidents surged to 58, twice the daily average, turning this into one of the most dangerous days in recent years.
+
+Source: https://www.wusa9.com/article/weather/severe-weather/storm-damage-capitol-heights-brings-large-trees-down-prince-georges-county/65-c4ca460f-93f7-4ac9-b35d-13f5d57664b6?fbclid=IwY2xjawQQce5leHRuA2FlbQIxMQBicmlkETIzM0NtU0ZPZXZaZ1dVV2NFc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHmy2g80kq6kRyVT80J3ZERSBoscTz24N9D4nkpjw8j7ewgkHErHJYr9DzVFX_aem_b-968OwWhSH9clwNYZWNZA 
