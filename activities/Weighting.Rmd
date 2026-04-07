@@ -93,11 +93,11 @@ ggplot(nonvoters_data, aes(x = weight)) +
 **Questions:**
 
 1. What is the range of weights in this dataset?
-
+From about 0.2 to about 3
 2. What does it mean when a respondent has a weight of 0.23? What about 3.04?
-
+A weight of 0.23 means the respondent's volume is getting turned down a lot because that type of person is overrepresented, while 3.04 may be someone getting turned up a lot because they are not represented very often.
 3. Why might some respondents be weighted more heavily than others?
-
+Some respondents might be weighted more heavily than others because they belong to a specific group or identity that otherwise didn't seem to be present. 
 # Exercise 1: Voter Categories and Weighting
 
 First, let's look at how many people fall into each voting category in our sample.
@@ -232,7 +232,8 @@ kable(comparison, digits = 1, caption = "Difference Between Weighted and Unweigh
 **Answer These Questions:**
 
 1. Which voter category shows the biggest difference between weighted and unweighted results?
-
+The rarely/never voters show the biggest difference between weighted and unweighted at -3.6
 2. How might these differences affect reporting on likely voter turnout?
-
+We may underrepresent the amount of people who are not voting in the election and thus overrepresent the turnout. 
 3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample?
+These differences likely exist because voters who do not turn out to vote are also likely to not turn out to polls. People who do not vote are likely to be underrepresented in this sample as they may have been less likely to respond to the poll. 
