@@ -1,0 +1,29 @@
+---
+title: "final_project"
+output: html_document
+---
+###INFO
+
+I found the largest college from every state and looked at the voting results from the past 7 elections in the counties those colleges are located in. I removed Alaska from the dataset because Alaska does not have counties, and the population is very small and unique. 
+
+The Cook PVI scores would not load. I did not understand how to open the file with the per-county voting information, so my Excel sheet is entirely hand-entered. I have not finished entering my data, sorry. I recorded the proportions of Democratic and Republican popular votes from each election. I added the modifier  "university-- yes or no" because I figured it could help me filter information in R. Frankly, I think most of the computing is better done in Excel. I would like to find a way to take the difference of the proportions, I think those figures will be the key to analyzing this trend. I know how to do this in Excel, and may end up just modifying the data in Excel, but I understand if you would prefer I use R to do that. 
+
+I also think that some graphics will be really important for my final, something showing the difference in proportion for college counties and their states. I am REALLY going to need help with that, I think ggplot is the most confusing R function. So I am looking for a lot of advice on this project, but as I enter data I am noticing a trend.
+
+I have been noticing that a lot of these counties are voting much more Democratically than their states, some by almost 20 percentage points. I want to run a few tests to see the significance of this difference, I suppose the null hypothesis in those tests would be that the difference between college counties and their states' voting proportion would be 0. 
+
+Since my sheet is unfinished, I didn't want to load it in here, but I will provide a link to the WIP.
+
+This link gives you the ability to view, if you would prefer I send a link to edit, let me know!
+https://1drv.ms/x/c/932aad8149925c8d/IQAwUqCIIcLCTqgzqPMuakQwAVIOPvJlHRUdpY7f-PNvduI?e=Ya5weg 
+
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r} 
+election_data <- read_csv("###link_to_sheet")
+```
+
