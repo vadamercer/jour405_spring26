@@ -6,6 +6,8 @@ output: html_document
 
 I found the largest college from every state and looked at the voting results from the past 7 elections in the counties those colleges are located in. I removed Alaska from the dataset because Alaska does not have counties, and the population is very small and unique. 
 
+https://www.businessinsider.com/map-university-college-most-students-each-state-2014-3 This is the source I used to find the largest schools, I am just realizing it is a little old but I feel like since 2014 is about the middle of 2000-2024 that it is okay. 
+
 The Cook PVI scores would not load. I did not understand how to open the file with the per-county voting information, so my Excel sheet is entirely hand-entered. I have not finished entering my data, sorry. I recorded the proportions of Democratic and Republican popular votes from each election. I added the modifier  "university-- yes or no" because I figured it could help me filter information in R. Frankly, I think most of the computing is better done in Excel. I would like to find a way to take the difference of the proportions, I think those figures will be the key to analyzing this trend. I know how to do this in Excel, and may end up just modifying the data in Excel, but I understand if you would prefer I use R to do that. 
 
 I also think that some graphics will be really important for my final, something showing the difference in proportion for college counties and their states. I am REALLY going to need help with that, I think ggplot is the most confusing R function. So I am looking for a lot of advice on this project, but as I enter data I am noticing a trend.
