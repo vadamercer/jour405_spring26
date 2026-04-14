@@ -51,4 +51,20 @@ matches |>
 
 The correlation calculation is pretty low, at about 0.018. The scatterplot shows little correlation, the line that is drawn through the plot is practically straight because there seems to be little correlation and plots are very scattered. I would not say there is evidence of a correlation between the frequency of fouls and the amount a team wins.
 
+
+### Task 7: Choose another variable and repeat the steps in Tasks 4-5, then describe the result
+
+```{r}
+matches |> summarize(correlation = cor(corners, goal_diff, method="pearson"))
+
+matches |> 
+  ggplot() +
+  geom_point(aes(x=goal_diff, y=corners)) +
+  geom_smooth(aes(x=goal_diff, y=corners), method="lm")
+
+```
+
+
+For corners, the correlation coefficient I got back was about 0.38, and the graph shows a line with a slightly positive slope. I would say this may not totally suggest a correlation, just because the graphic has so many points that fall far from the line, but there may be a correlation present. 
+
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
