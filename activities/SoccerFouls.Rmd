@@ -49,5 +49,6 @@ matches |>
 
 ### Task 6: Describe the results of both the correlation calculation and the scatterplot.
 
+The correlation calculation is pretty low, at about 0.018. The scatterplot shows little correlation, the line that is drawn through the plot is practically straight because there seems to be little correlation and plots are very scattered. I would not say there is evidence of a correlation between the frequency of fouls and the amount a team wins.
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
