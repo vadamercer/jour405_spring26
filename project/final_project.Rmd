@@ -26,6 +26,10 @@ library(tidyverse)
 ```
 
 ```{r} 
-election_data <- read_csv("###link_to_sheet")
+election_data <- read_csv("CollegeCountyParties.csv")
+```
+
+```{r}
+election_data |> summarize(mean_2000_d = mean("2000_D"))
 ```
 
