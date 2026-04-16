@@ -30,6 +30,6 @@ election_data <- read_csv("CollegeCountyParties.csv")
 ```
 
 ```{r}
-election_data |> summarize(mean_2000_d = mean("2000_D"))
+election_data |> summarize(mean_2000_d = mean(D_2000))
 ```
 
