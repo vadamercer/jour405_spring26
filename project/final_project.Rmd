@@ -2,6 +2,12 @@
 title: "final_project"
 output: html_document
 ---
+
+### TESTS
+
+The most obvious test I want to run is a significance test on the differences between the average difference of partisan votes for elections, with a null-hypothesis that the mean value for democratic and republican is 0. I am pretty confident this will prove conclusive, so I'm wondering how far in each direction I can disprove null-hypotheses. (i.e. is it an even further mean than if the true difference were 3 percentage points? something like that)
+
+I would be interested in seeing if there is a correlation between time and partisan difference, so running a test for correlation would be good too. I'm also interested in seeing if general partisan divide, or the gap between democratic and republican votes in these counties, has increased over time. I would imagine I would have to mutate the chart a few times to find this. I'm honestly not entirely sure how I could run this test, but I have a vision for it that I would like to try out. What I'd imagine I have to do is mutate for each election to find the difference is ex: 2000_D - 2000_R = 2000_CtDif. And that would become a new column, and then each election would have one column. Then I would take the mean from each of the CtDifs and plot it and try to find the correlation coefficient. 
 ###INFO
 
 I found the largest college from every state and looked at the voting results from the past 7 elections in the counties those colleges are located in. I removed Alaska from the dataset because Alaska does not have counties, and the population is very small and unique. 
