@@ -3,6 +3,20 @@ title: "final_project"
 output: html_document
 ---
 
+### QUESTIONS
+
+re: linear model
+The slope is 0.6734, which is a positive number indicating some level of change. I was wondering if this is a significant slope in terms of my data, given that my x values reach such a high number I was thinking a decimal point could be insignificant, however I do remember there is a value we find that will be between -1 and 1, and if this is that value then I would assume it is significant. 
+
+
+
+### TRIALS 
+   Goals: Look at some graph options, do significance tests for the collective elections, maybe look to see if it has increased over time. 
+   
+# Significance test
+
+
+
 ### TESTS
 
 The most obvious test I want to run is a significance test on the differences between the average difference of partisan votes for elections, with a null-hypothesis that the mean value for democratic and republican is 0. I am pretty confident this will prove conclusive, so I'm wondering how far in each direction I can disprove null-hypotheses. (i.e. is it an even further mean than if the true difference were 3 percentage points? something like that)
@@ -38,4 +52,35 @@ election_data <- read_csv("CollegeCountyParties.csv")
 ```{r}
 election_data |> summarize(mean_2000_d = mean(D_2000))
 ```
+### tidying the data using professor's code
+```{r}
+election_long <- election_data |>
+  pivot_longer(
+    cols = -c(Name, State, County),
+    names_to = c("metric", "year"),
+    names_pattern = "(.+)_(\\d{4})",
+    values_to = "pct"
+  ) |>
+  mutate(year = as.integer(year))
+  
+  election_tidy <- election_long |>
+  pivot_wider(names_from = metric, values_from = pct) |>
+  rename(
+    county_dem = D,    county_rep = R,
+    state_dem  = STD,  state_rep  = STR,
+    gap_dem    = DIFD, gap_rep    = DIFR
+  ) |>
+  mutate(
+    county_margin = county_dem - county_rep,
+    state_margin  = state_dem  - state_rep,
+    margin_gap    = county_margin - state_margin
+  )
+```
+
+```{r}
+lm(margin_gap ~ year, data = election_tidy) 
+### coefficients: intercept (-1338.3604, year 0.6734)
+### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted bluer over time. 
+```
+
 
