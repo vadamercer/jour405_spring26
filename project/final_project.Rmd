@@ -2,20 +2,178 @@
 title: "final_project"
 output: html_document
 ---
-
+CLAUDE LINK: https://claude.ai/share/f888cd21-9563-437c-a19f-d9e91f54c688
 ### QUESTIONS
 
 re: linear model
 The slope is 0.6734, which is a positive number indicating some level of change. I was wondering if this is a significant slope in terms of my data, given that my x values reach such a high number I was thinking a decimal point could be insignificant, however I do remember there is a value we find that will be between -1 and 1, and if this is that value then I would assume it is significant. 
 
+re: "Margin"
+Since I was a little confused on how margin could be used to categorize data when running commands, I asked Claude for help. I don't think there was any precedent of this in class, so it felt necessary to consult AI for this project.
 
+re: whats next
+I have found evidence that there is a significant difference in democratic voting between college counties and their states, I have created a confidence interval, and I have tried my hand with graphing. I think these 3 trials are setting me up for success, but I'm wondering if there is any other methods of statistical analysis I should be using for my final project to dig deeper?
+
+re: confidence interval
+looking at DifD, my confidence interval looks like this: 
+### mean pct 8.013207
+### moe : 0.9914677
+### ci lower: 7.509137
+### ci upper: 8.517277
+If I were trying to write about the confidence interval, what are some ways I may present this information? Is it safe for me to say the average difference in percentage points for every election was 8.013207? Does that mean anything, would it be more meaningful if I broke that down per-election?
 
 ### TRIALS 
    Goals: Look at some graph options, do significance tests for the collective elections, maybe look to see if it has increased over time. 
+ 
+ 
+ 
+```{r}
+library(tidyverse)
+```
+
+```{r} 
+election_data <- read_csv("CollegeCountyParties.csv")
+```
+```{r}
+election_long <- election_data |>
+  pivot_longer(
+    cols = -c(Name, State, County),
+    names_to = c("metric", "year"),
+    names_pattern = "(.+)_(\\d{4})",
+    values_to = "pct"
+  ) |>
+  mutate(year = as.integer(year))
+  
+  election_tidy <- election_long |>
+  pivot_wider(names_from = metric, values_from = pct) |>
+  rename(
+    county_dem = D,    county_rep = R,
+    state_dem  = STD,  state_rep  = STR,
+    gap_dem    = DIFD, gap_rep    = DIFR
+  ) |>
+  mutate(
+    county_margin = county_dem - county_rep,
+    state_margin  = state_dem  - state_rep,
+    margin_gap    = county_margin - state_margin
+  )
+```
+ 
    
+   
+   
+# Linear Model
+
+```{r}
+lm(margin_gap ~ year, data = election_tidy) 
+### coefficients: intercept (-1338.3604, year 0.6734)
+### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted bluer over time. 
+```
+
 # Significance test
+-- filtering to the difference in democratic data, keeping in mind that DIFD = college county minus state percent
 
 
+
+```{R}
+# Filter to only DIFD rows
+difd_data <- election_long[election_long$metric == "DIFD", ]
+# Run one-sample t-test against mu = 0
+t_test_difd <- t.test(
+  difd_data$pct,   
+  mu = 0,
+  alternative = "greater"  # you expect college counties to be MORE Democratic than the state
+)
+
+t_test_difd
+```
+# RESULTS: 
+
+t = 15.897, df = 342, p-value < 2.2e-16
+alternative hypothesis: true mean is greater than 0
+95 percent confidence interval:
+ 7.181834      Inf
+sample estimates:
+mean of x 
+ 8.013207 
+Meaning: We know there is a significant difference in college counties and their states as far as voting democratically. 
+
+# DIFD Mean and SD
+
+```{R}
+difd_mean_stats <- difd_data |> 
+  summarise(
+    mean_pct = mean(pct),
+    sd_pct = sd(pct),
+    n = n()
+  )
+
+difd_mean_stats
+#mean = 8.013207
+#sd = 9.335507
+#n = 343
+```
+
+```{R}
+difd_mean_stats <- difd_mean_stats |>
+  mutate(
+    se_pct = sd_pct / sqrt(343)
+  )
+
+difd_mean_stats
+```
+
+
+```{R}
+difd_mean_stats <- difd_mean_stats |>
+  mutate(
+    t_critical = qt(0.975, df = n - 1),
+    margin_error = t_critical * se_pct,
+    ci_lower = mean_pct - se_pct,
+    ci_upper = mean_pct + se_pct
+  )
+
+difd_mean_stats |>
+  select(mean_pct, margin_error, ci_lower, ci_upper)
+
+### mean pct 8.013207
+### moe : 0.9914677
+### ci lower: 7.509137
+### ci upper: 8.517277
+```
+
+# GRAPHS
+I wanted to create a graph comparing the average democratic state vote to the average democratic county vote. I asked Claude for help with this as well, so the code I am going to use has been helped by that. 
+
+```{R}
+library(dplyr)
+library(ggplot2)
+
+# Filter to just D and STD, then compute averages by year
+avg_dem <- election_long %>%
+  filter(metric %in% c("D", "STD")) %>%
+  group_by(year, metric) %>%
+  summarise(avg_pct = mean(pct, na.rm = TRUE), .groups = "drop")
+
+# Plot
+ggplot(avg_dem, aes(x = year, y = avg_pct, color = metric)) +
+  geom_line() +
+  geom_point() +
+  scale_color_manual(
+    values = c("D" = "blue", "STD" = "lightblue"),
+    labels = c("D" = "College County Dem %", "STD" = "State Dem %")
+  ) +
+  scale_x_continuous(breaks = seq(2000, 2024, by = 4)) +
+  labs(
+    title = "Average Democratic Vote: College Counties vs. States",
+    x = "Year",
+    y = "Average Democratic Vote (%)",
+    color = "Group"
+  ) +
+  theme_minimal()
+
+```
+# Comments
+This looks like a good graphic to support my hypothesis! 
 
 ### TESTS
 
@@ -41,46 +199,6 @@ https://1drv.ms/x/c/932aad8149925c8d/IQAwUqCIIcLCTqgzqPMuakQwAVIOPvJlHRUdpY7f-PN
 
 
 
-```{r}
-library(tidyverse)
-```
 
-```{r} 
-election_data <- read_csv("CollegeCountyParties.csv")
-```
-
-```{r}
-election_data |> summarize(mean_2000_d = mean(D_2000))
-```
-### tidying the data using professor's code
-```{r}
-election_long <- election_data |>
-  pivot_longer(
-    cols = -c(Name, State, County),
-    names_to = c("metric", "year"),
-    names_pattern = "(.+)_(\\d{4})",
-    values_to = "pct"
-  ) |>
-  mutate(year = as.integer(year))
-  
-  election_tidy <- election_long |>
-  pivot_wider(names_from = metric, values_from = pct) |>
-  rename(
-    county_dem = D,    county_rep = R,
-    state_dem  = STD,  state_rep  = STR,
-    gap_dem    = DIFD, gap_rep    = DIFR
-  ) |>
-  mutate(
-    county_margin = county_dem - county_rep,
-    state_margin  = state_dem  - state_rep,
-    margin_gap    = county_margin - state_margin
-  )
-```
-
-```{r}
-lm(margin_gap ~ year, data = election_tidy) 
-### coefficients: intercept (-1338.3604, year 0.6734)
-### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted bluer over time. 
-```
 
 
