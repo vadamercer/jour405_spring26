@@ -9,7 +9,7 @@ Multiple regression analysis is a statistical method used to understand the rela
 
 ```{r setup}
 library(tidyverse)
-#install.packages('corrplot')
+install.packages('corrplot')
 library(corrplot)
 ```
 
@@ -26,7 +26,7 @@ teams <- read_csv("https://raw.githubusercontent.com/dwillis/jour405_files/main/
 Next, we construct a linear model to analyze how different factors like `Yards Gained`, `Takeaways`, and `Points Scored` influence the number of wins. This model helps us quantify the relationships and assess which factors are significant predictors of success.
 
 ```{r}
-model <- lm(Wins ~ `Yards Gained` + Takeaways + `Points Scored`, data = teams)
+model <- lm(Wins ~ `Points Scored` + Takeaways + Giveaways, data = teams)
 summary(model)
 ```
 
@@ -54,15 +54,16 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+This seems to be a useful model, it checks the coefficients against each other to show if anything is more effective than another, because we may think something is effective, but there is actually something with even more effect. The residual standard error is pretty low, so I think this is a helpful model. 
 
 ## Correlation Analysis
 
 After building the model, we calculate the correlation matrix for our variables of interest. This matrix helps visualize the strength and direction of the relationships between each pair of variables.
 
 ```{r}
-selected_vars <- teams |>  select(`Yards Gained`, Takeaways, `Points Scored`, Wins)
+selected_vars <- teams |>  select(`Points Scored`, Takeaways, `Giveaways`, Wins, 'Yards Allowed')
 cor(selected_vars)
+###Yards allowed has a significant negative influence on wins.
 ```
 
 ## Visualization of Correlation Matrix
@@ -80,8 +81,10 @@ The results from our correlation analysis show the strength of the relationships
 
 Which of these three factors - Yards Gained, Takeaways and Points Scored - have the most impact on wins? Are there any that do not seem impactful at all?
 
-ANSWER HERE
+The factor that had the most impact on wins was points scored, while the least impactful seemed to be yards gained, as removing it had very little effect on the r-squared.  
 
 ## Using the Model (3 points)
 
 Without using the words "multiple regression model", describe how you could use this model to cover a team or game.
+
+Using this model could help us report on a team's takeaways or points scored trends for a season and predict how they will do, as well as noting areas that improvement could lead to further wins. If you were covering a game live, you could make note of the importance of points scored or takeaways to winning. 

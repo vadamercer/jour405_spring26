@@ -64,9 +64,16 @@ election_long <- election_data |>
 # Linear Model
 
 ```{r}
-lm(margin_gap ~ year, data = election_tidy) 
+model <- lm(margin_gap ~ year, data = election_tidy) 
+summary(model)
 ### coefficients: intercept (-1338.3604, year 0.6734)
 ### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted bluer over time. 
+### residuals: min -47.092, 1q -11.212, median -0.171, 3q 13.047, max 41.296
+### error(year) - 0.1199 t-value 5.616, Pr(>|t|) 4.06e-08
+#### residual standard error: 17.77 on 341 degrees of freedom
+### multiple r squared: 0.08466 adjusted r squared: 0.08197 
+### -> 8.197% of the change is explained by the variance in data, so this may not be the best argument to make 
+### F-statistic: 31.54 on 1 and df, p-value: 4.062e-08
 ```
 
 # Significance test
