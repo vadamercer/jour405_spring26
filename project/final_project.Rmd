@@ -74,6 +74,7 @@ summary(model)
 ### multiple r squared: 0.08466 adjusted r squared: 0.08197 
 ### -> 8.197% of the change is explained by the variance in data, so this may not be the best argument to make 
 ### F-statistic: 31.54 on 1 and df, p-value: 4.062e-08
+### while time may not explain the increase, the margin has grown by about # every year. 
 ```
 
 # Significance test
