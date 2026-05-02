@@ -1,6 +1,6 @@
 ---
 title: "Multiple Regression Analysis: Maryland Voter Turnout"
-name: "YOUR NAME HERE"
+name: "Vada Mercer"
 ---
 
 # Introduction
@@ -26,7 +26,7 @@ head(md_turnout)
 
 Before building our model, let's explore the data to understand the variables and their relationships. Examine the correlation matrix to see how the independent variables relate to each other and to the dependent variable (voter turnout). Which variables seem to be correlated? Are there any that are not correlated at all? Also look at the multiple scatterplots. Which variables seem to have a linear relationship with the dependent variable? Which do not?
 
-ANSWER HERE
+It seems like the amount of unemployed correlates to voter turnout, with turnout decreasing as unemployed increases. The amount of bachelors degrees does not seem to have a correlation to voter turnout. Looking at the scatterplots, the population does not seem to have a linear relationship with the dependent variable, and neither does the percent of bachelors degrees. Income and unemployment do seem to have a linear relationship.
 
 
 ```{r}
@@ -72,24 +72,26 @@ The residuals of a model are the differences between observed values and the val
 
 The coefficients tell us the estimated effect of each independent variable on the dependent variable:
 
-* **Population**: Is the coefficient positive or negative? Is it statistically significant?
-* **Income**: Does higher income correlate with higher turnout?
-* **Education (pct_bachelors_higher)**: How does education level impact voter participation?
-* **Unemployment**: Is there a relationship between unemployment and voter turnout?
-* **Median Age**: Do counties with older populations have different turnout rates?
-* **Race (pct_white)**: Is there a relationship between racial composition and turnout?
+* **Population**: Is the coefficient positive or negative? Is it statistically significant? The coefficient for population is negative, but it is not statistically significant.
+* **Income**: Does higher income correlate with higher turnout? 
+* **Education (pct_bachelors_higher)**: How does education level impact voter participation? 
+* **Unemployment**: Is there a relationship between unemployment and voter turnout? 
+* **Median Age**: Do counties with older populations have different turnout rates? 
+* **Race (pct_white)**: Is there a relationship between racial composition and turnout? There is a statistically significant relationship between racial composition and turnout. 
 
 ### Model Fit
 
-* **Residual Standard Error**: How much does the model typically deviate from actual turnout?
-* **Multiple R-squared**: What percentage of the variability in turnout is explained by the model?
-* **Adjusted R-squared**: How well does the model fit after accounting for the number of variables?
-* **F-statistic**: Is the model as a whole statistically significant?
+* **Residual Standard Error**: How much does the model typically deviate from actual turnout? .02174 is the residual standard error.
+* **Multiple R-squared**: What percentage of the variability in turnout is explained by the model? 85.39% of the variability in turnout is explained by the model
+* **Adjusted R-squared**: How well does the model fit after accounting for the number of variables? The model fits 80.23%
+* **F-statistic**: Is the model as a whole statistically significant? As a whole, the model is statistically significant with a p-value of 2.999e-06.
 
 
 Examine the output of the model, checking the coefficients, residuals, and overall model fit. How well does this multiple variable model predict turnout? Do any of the variables seem to be insignificant? Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+Some of the variables that are not statistically significant are population, percent with a bachelors degree or higher, and percent unemployed. The variable model gets a B for predicting turnout, and it seems to be a relatively useful model when we consider things like percent unemployed or income which have a statistically significant relationship.
+
+
 
 ```{r}
 # Build initial model with all predictors
@@ -103,19 +105,19 @@ summary(initial_model)
 
 Create three alternative models by adding or removing variables to see if we can improve the model's performance. Turnout will always be the dependent variable, but you should alter the independent variables by removing or adding some. Then compare the models using adjusted R-squared values. Are any of the models significantly better than the others?
 
-ANSWER HERE
+Something I found surprising was that model 2, which uses only the statistically significant variables, did not turn out to be better than our original model, and actually had the same adjusted r-squared. Another thing I thought was surprising was that my model using only the non-statistically significant variables, model 4, actually got a higher adjusted r-squared than the model that includes some significant and some insignificant, model 3. 
 
 ```{r}
 # Model 2
-model2 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model2 <- lm(turnout ~ income + median_age + pct_white, data = md_turnout)
 summary(model2)
 
 # Model 3
-model3 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model3 <- lm(turnout ~ income + pct_unemployed + pct_bachelors_higher, data = md_turnout)
 summary(model3)
 
 # Model 4
-model4 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model4 <- lm(turnout ~ population + pct_bachelors_higher + pct_unemployed, data = md_turnout)
 summary(model4)
 
 # Compare models
@@ -144,4 +146,4 @@ ggplot(model_comparison, aes(x = reorder(Model, Adjusted_R_squared), y = Adjuste
 
 Without using the words "multiple regression model", describe how you could use this analysis to cover an election or voter participation story.
 
-ANSWER HERE
+Presenting to readers the strength that variables have in affecting voter turnout is a good start, however there are some significant variables that I think need to be touched on. For example, at face value, presenting a statistic that says populations with a higher percent of white citizens tend to have higher turnout may become a cheap shortcut into racism if the nuance of these statistics is not explained. For example, income is an even larger influence on voter turnout, and we need to help readers understand that years of systemic racism and redlining has put minorities at a financial disadvantage. Presenting this statistic while also covering its nuance may also encourage voter turnout from minority populations, as they may be encouraged to participate rather than feeling shunned away when reduced to a statistic.
