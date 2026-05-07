@@ -3,28 +3,18 @@ title: "final_project"
 output: html_document
 ---
 CLAUDE LINK: https://claude.ai/share/f888cd21-9563-437c-a19f-d9e91f54c688
-### QUESTIONS
 
-re: linear model
-The slope is 0.6734, which is a positive number indicating some level of change. I was wondering if this is a significant slope in terms of my data, given that my x values reach such a high number I was thinking a decimal point could be insignificant, however I do remember there is a value we find that will be between -1 and 1, and if this is that value then I would assume it is significant. 
+###INFO
 
-re: "Margin"
-Since I was a little confused on how margin could be used to categorize data when running commands, I asked Claude for help. I don't think there was any precedent of this in class, so it felt necessary to consult AI for this project.
+I found the largest college from every state and looked at the voting results from the past 7 (2000-2024) elections in the counties those colleges are located in. I removed Alaska from the dataset because Alaska does not have counties, and the population is very small and unique. 
 
-re: whats next
-I have found evidence that there is a significant difference in democratic voting between college counties and their states, I have created a confidence interval, and I have tried my hand with graphing. I think these 3 trials are setting me up for success, but I'm wondering if there is any other methods of statistical analysis I should be using for my final project to dig deeper?
+This is the source I used to find the largest colleges from each state: https://www.businessinsider.com/map-university-college-most-students-each-state-2014-3
 
-re: confidence interval
-looking at DifD, my confidence interval looks like this: 
-# mean pct 8.013207
-# moe : 0.9914677
-# ci lower: 7.509137
-# ci upper: 8.517277
-If I were trying to write about the confidence interval, what are some ways I may present this information? Is it safe for me to say the average difference in percentage points for every election was 8.013207? Does that mean anything, would it be more meaningful if I broke that down per-election?
+I recorded the proportions of Democratic and Republican popular votes from each election. County votes are under the classifications "D" and "R," and their states are under "STD" and "STR." I also recorded the difference between college counties and the state they are in for democratic and republican proportions, found under classifications DIFD and DIFR. 
 
-### TRIALS 
-   Goals: Look at some graph options, do significance tests for the collective elections, maybe look to see if it has increased over time. 
- 
+In my data, I found evidence of a significant difference in proportion between democratic votes in counties versus their states. 
+
+You can find additional information and previous questions from the original testing in this Google Doc: https://docs.google.com/document/d/1GwR0k3jpDCHCwXB0oGisCfvr7JbEp4jrUfgC5HOg6rg/edit?usp=sharing
  
 ### Load the tidyverse to read our data
 ```{r}
@@ -73,7 +63,7 @@ summary(model)
 ### error(year) - 0.1199 t-value 5.616, Pr(>|t|) 4.06e-08
 #### residual standard error: 17.77 on 341 degrees of freedom
 ### multiple r squared: 0.08466 adjusted r squared: 0.08197 
-### -> 8.197% of the change is explained by the variance in data, so this may not be the best argument to make 
+### -> 8.197% of the change in the gap is explained by the time change, so this may not be the best argument to make 
 ### F-statistic: 31.54 on 1 and df, p-value: 4.062e-08
 ### while time may not explain the increase, the margin has grown by about # every year. 
 ```
@@ -128,15 +118,15 @@ difd_mean_stats <- difd_mean_stats |>
 
 difd_mean_stats
 ```
-
+### Creating a confidence interval for the true mean of the DIFD
 
 ```{R}
 difd_mean_stats <- difd_mean_stats |>
   mutate(
     t_critical = qt(0.975, df = n - 1),
     margin_error = t_critical * se_pct,
-    ci_lower = mean_pct - se_pct,
-    ci_upper = mean_pct + se_pct
+    ci_lower = mean_pct - margin_error,
+    ci_upper = mean_pct + margin_error
   )
 
 difd_mean_stats |>
@@ -144,12 +134,13 @@ difd_mean_stats |>
 
 ### mean pct 8.013207
 ### moe : 0.9914677
-### ci lower: 7.509137
-### ci upper: 8.517277
+### ci lower: 7.021739
+### ci upper: 9.004675
+### We are 95% confident that the true difference in democratic voting percentage points between a college county and its state is between about 7.02 and 9.00. 
 ```
 
-# GRAPHS
-I wanted to create a graph comparing the average democratic state vote to the average democratic county vote. I asked Claude for help with this as well, so the code I am going to use has been helped by that. 
+### GRAPHS
+I wanted to create a graph comparing the average democratic state vote to the average democratic county vote. I asked Claude for help with this as well, so the code I am going to use has been helped by that. There are 2 systems Claude asked to load (dplyr and ggplot2), so that is what we are first loading
 
 ```{R}
 library(dplyr)
@@ -182,30 +173,19 @@ ggplot(avg_dem, aes(x = year, y = avg_pct, color = metric)) +
 # Comments
 This looks like a good graphic to support my hypothesis! 
 
-### TESTS
+### Story Pitch: 
 
-The most obvious test I want to run is a significance test on the differences between the average difference of partisan votes for elections, with a null-hypothesis that the mean value for democratic and republican is 0. I am pretty confident this will prove conclusive, so I'm wondering how far in each direction I can disprove null-hypotheses. (i.e. is it an even further mean than if the true difference were 3 percentage points? something like that)
+#Finding: 
+There is data suggesting a significant difference in voting patterns in college counties compared to their states. (Counties containing a large university, in this case the largest university of the state the county belongs to). The data shows that college counties tend to vote about 8 percentage points more Democrat than their states. There is also data suggesting that the gap is growing by about 2 percentage points each election. The data covers the past 7 elections, from 2000 to 2024. 
+#Lede:
 
-I would be interested in seeing if there is a correlation between time and partisan difference, so running a test for correlation would be good too. I'm also interested in seeing if general partisan divide, or the gap between democratic and republican votes in these counties, has increased over time. I would imagine I would have to mutate the chart a few times to find this. I'm honestly not entirely sure how I could run this test, but I have a vision for it that I would like to try out. What I'd imagine I have to do is mutate for each election to find the difference is ex: 2000_D - 2000_R = 2000_CtDif. And that would become a new column, and then each election would have one column. Then I would take the mean from each of the CtDifs and plot it and try to find the correlation coefficient. 
-###INFO
+College counties tend to vote more Democrat
 
-I found the largest college from every state and looked at the voting results from the past 7 elections in the counties those colleges are located in. I removed Alaska from the dataset because Alaska does not have counties, and the population is very small and unique. 
+#Potential Issues:
+1. While the finding we made was significant and interesting, it's a little unsurprising. Democrats tend to be more educated and younger than Republicans, so when we are looking at counties made up of educated, higher-class, and young individuals, its unsurprising there is a stronger Democratic tendency.
+2. I don't want this data to lead readers to any crazy conspiracies. It might be easy to look at this and say "Well big colleges must be brainwashing their students to vote more Democratically." I need to be very careful in my language to not suggest fault. A good way to avoid this is to acknowledge the issues seen in (1). 
 
-https://www.businessinsider.com/map-university-college-most-students-each-state-2014-3 This is the source I used to find the largest schools, I am just realizing it is a little old but I feel like since 2014 is about the middle of 2000-2024 that it is okay. 
-
-The Cook PVI scores would not load. I did not understand how to open the file with the per-county voting information, so my Excel sheet is entirely hand-entered. I have not finished entering my data, sorry. I recorded the proportions of Democratic and Republican popular votes from each election. I added the modifier  "university-- yes or no" because I figured it could help me filter information in R. Frankly, I think most of the computing is better done in Excel. I would like to find a way to take the difference of the proportions, I think those figures will be the key to analyzing this trend. I know how to do this in Excel, and may end up just modifying the data in Excel, but I understand if you would prefer I use R to do that. 
-
-I also think that some graphics will be really important for my final, something showing the difference in proportion for college counties and their states. I am REALLY going to need help with that, I think ggplot is the most confusing R function. So I am looking for a lot of advice on this project, but as I enter data I am noticing a trend.
-
-I have been noticing that a lot of these counties are voting much more Democratically than their states, some by almost 20 percentage points. I want to run a few tests to see the significance of this difference, I suppose the null hypothesis in those tests would be that the difference between college counties and their states' voting proportion would be 0. 
-
-Since my sheet is unfinished, I didn't want to load it in here, but I will provide a link to the WIP.
-
-This link gives you the ability to view, if you would prefer I send a link to edit, let me know!
-https://1drv.ms/x/c/932aad8149925c8d/IQAwUqCIIcLCTqgzqPMuakQwAVIOPvJlHRUdpY7f-PNvduI?e=Ya5weg 
-
-
-
+#Further information: 
 
 
 
