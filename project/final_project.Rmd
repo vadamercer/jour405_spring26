@@ -16,21 +16,22 @@ I have found evidence that there is a significant difference in democratic votin
 
 re: confidence interval
 looking at DifD, my confidence interval looks like this: 
-### mean pct 8.013207
-### moe : 0.9914677
-### ci lower: 7.509137
-### ci upper: 8.517277
+# mean pct 8.013207
+# moe : 0.9914677
+# ci lower: 7.509137
+# ci upper: 8.517277
 If I were trying to write about the confidence interval, what are some ways I may present this information? Is it safe for me to say the average difference in percentage points for every election was 8.013207? Does that mean anything, would it be more meaningful if I broke that down per-election?
 
 ### TRIALS 
    Goals: Look at some graph options, do significance tests for the collective elections, maybe look to see if it has increased over time. 
  
  
- 
+### Load the tidyverse to read our data
 ```{r}
 library(tidyverse)
 ```
 
+### Load the data, then we are going to organize the data into simpler datasets.
 ```{r} 
 election_data <- read_csv("CollegeCountyParties.csv")
 ```
@@ -61,7 +62,7 @@ election_long <- election_data |>
    
    
    
-# Linear Model
+### This code makes a linear model using our data to see if the margin has grown
 
 ```{r}
 model <- lm(margin_gap ~ year, data = election_tidy) 
@@ -77,10 +78,8 @@ summary(model)
 ### while time may not explain the increase, the margin has grown by about # every year. 
 ```
 
-# Significance test
--- filtering to the difference in democratic data, keeping in mind that DIFD = college county minus state percent
 
-
+### Running a significance test to see if there is a significant difference, filtering to the difference in democratic votes, keeping in mind that DIFD = college county minus state percent. 
 
 ```{R}
 # Filter to only DIFD rows
@@ -105,7 +104,7 @@ mean of x
  8.013207 
 Meaning: We know there is a significant difference in college counties and their states as far as voting democratically. 
 
-# DIFD Mean and SD
+### DIFD Mean and SD, finding basic descriptive statistics
 
 ```{R}
 difd_mean_stats <- difd_data |> 
@@ -120,7 +119,7 @@ difd_mean_stats
 #sd = 9.335507
 #n = 343
 ```
-
+### Creating a simple dataset for the descriptive statistics about the difference in democratic votes. 
 ```{R}
 difd_mean_stats <- difd_mean_stats |>
   mutate(
