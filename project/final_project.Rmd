@@ -48,7 +48,7 @@ election_long <- election_data |>
     margin_gap    = county_margin - state_margin
   )
 ```
- 
+#These datasets will make it a little easier to work with our data layer on.
    
    
    
@@ -57,15 +57,30 @@ election_long <- election_data |>
 ```{r}
 model <- lm(margin_gap ~ year, data = election_tidy) 
 summary(model)
+### This model is looking at the gap of county_margin (county_dem - county_rep) minus the state margin (state_dem - state_rep). It shows that political divide among counties is increasing compared to the political divide in states.
+### The gap between college counties and state voting margins has widened over time
 ### coefficients: intercept (-1338.3604, year 0.6734)
-### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted bluer over time. 
+### This says that in a linear model of our data, there is an intercept at -1338.3604, and the line we are plotting has a slope of 0.6734. This intercept makes sense given our data begins at x=2000, and it also shows us that college parties have in fact drifted farther from their state over time. 
 ### residuals: min -47.092, 1q -11.212, median -0.171, 3q 13.047, max 41.296
 ### error(year) - 0.1199 t-value 5.616, Pr(>|t|) 4.06e-08
 #### residual standard error: 17.77 on 341 degrees of freedom
 ### multiple r squared: 0.08466 adjusted r squared: 0.08197 
 ### -> 8.197% of the change in the gap is explained by the time change, so this may not be the best argument to make 
 ### F-statistic: 31.54 on 1 and df, p-value: 4.062e-08
-### while time may not explain the increase, the margin has grown by about # every year. 
+### while time may not explain the increase, the margin has grown by about 2.7 every year. 
+
+model <- lm(gap_dem ~ year, data = election_tidy)
+summary(model)
+
+### coefficients: intercept (-677.31696, year 0.34062)
+### This says that in a linear model of our data, there is an intercept at -677.31696, and the line increase by about 0.34062 every year. Given that an election occurs every 4 years, this means that the gap between college counties and their states' democratic vote percentage points increases by about 1.36248 every election. 
+### residuals: min -23.0432, 1q -5.6270, median -0.0958, 3q 6.3831, max 21.518
+###error(year) 0.06034, t-value 5.645, Pr(>|t|) 3.49e-08
+###residual standard error: 8.941 on 341 degrees of freedom
+### multiple r squared 0.08545, adjusted r-squared 0.08277
+### -> 8.277% of the change in the gap of democratic votes can be explained by time
+### F-statistic, 31.86 on 1 and 341 DF, p-value 3.488e-08
+###It would be misleading to just claim that the difference is growing without showing that the value is not the highest, but about 1.4 percentage points of difference every election can be an interesting statistic. 
 ```
 
 
@@ -92,7 +107,7 @@ alternative hypothesis: true mean is greater than 0
 sample estimates:
 mean of x 
  8.013207 
-Meaning: We know there is a significant difference in college counties and their states as far as voting democratically. 
+Meaning: The analysis provides strong evidence that college counties vote more Democrat than their states on average with a mean in difference that is clearly above 0.  
 
 ### DIFD Mean and SD, finding basic descriptive statistics
 
@@ -182,7 +197,7 @@ College counties tend to vote more Democrat
 #Finding: 
 An analysis of presidential election results from 2000 to 2024 found that counties containing each state's largest university consistently voted more Democratic than their state overall. Across 343 county-election observations, college counties voted on average about 8 percentage points more Democratic than states.
 
-The analysis also suggests that the political divide has widened over time by about 2.5 percentage points each election. A linear regression model found a positive relationship between election year and the difference between county and state voting margins, indicating that college counties have become increasingly more Democratic relative to their belonging state since 2000. 
+The analysis also suggests that the gap between college counties and state voting margins has widened over time by about 2.7 percentage points each election between a county and its state. A linear regression model found a positive relationship between election year and the difference between county and state voting margins, indicating that college counties have become increasingly more Democratic relative to their belonging state since 2000. Another regression model showed that the democratic percentage point difference is growing by about 1.36 every election. 
 
 #Why it matters: 
 
@@ -192,8 +207,8 @@ The story would help reinforce the notion that higher educated folks tend to vot
 
 #Evidence to use:
 - I'm pretty confident in claiming that the true difference in college counties versus their states is about 8 percentage points. (the p-value was   2.2e-16)
-- I am also going to use the linear model's slope (0.6734) multiplied by 4 to show the true difference in between elections. (2.6936)
-
+- I am also going to use the linear model's slope (0.6734) multiplied by 4 to show the political gap for elections growing. (2.6936)
+- I am going to use the linear model's slope (0.34062) multiplied by 4 (1.36248) to show that data suggests college counties are increasingly voting more blue than their given state.
 
 #Potential Issues:
 1. While the finding we made was significant and interesting, it's a little unsurprising. Democrats tend to be more educated and younger than Republicans, so when we are looking at counties made up of educated, higher-class, and young individuals, its unsurprising there is a stronger Democratic tendency.
@@ -206,4 +221,4 @@ There is some additional information I'd like to collect if I had the chance to.
 
 As far as interviews to collect, I would interview a political scientist who has an expertise in demographics and ask about voting behavior. I'd also ask about political polarization and contextualizing it in a large college setting. It would be interesting to get some professors from these large universities, and I could also see myself interviewing leaders of political clubs at these schools. It would be interetsing to hear from the Republican students at large universities to see their perspective on the differences. 
 
-
+As far as further playing with the data, breaking these elections down by year will help strengthen the story and give readers a better timeline of how things have shifted.
